@@ -134,7 +134,7 @@ Sử dụng các câu lệnh được chuẩn bị cũng sẽ cho bạn thống 
 
 Các câu lệnh được chuẩn bị cũng bảo vệ bạn tốt hơn với cách tấn công SQL injection
 
-**9. Không chuẩn hóa đủ**
+**9. Thiếu chuẩn hoá**
 
 [Chuẩn hóa cơ sở dữ liệu](http://en.wikipedia.org/wiki/Database_normalization) về cơ bản là quá trình tối ưu thiết kế cơ sở dữ liệu hoặc là cách bạn tổ chức dữ liệu của bạn thành các bảng.
 
@@ -153,7 +153,7 @@ Nhưng phần còn lại của quá trình chuẩn hóa đến từ rất nhiề
 
 **10. Chuẩn hóa quá nhiều**
 
-Điều này nghe có vè mâu thuẫn với điều trươc, nhưng cũng giống như nhiều thứ khác, chuẩn hóa cũng chỉ là 1 công cụ. Nó sẽ chẳng có 1 điểm kết cụ thể nào. Tôi nghĩa rằng nhiều nhà phát triển quên mất điều này và bắt đầu coi "công cụ" như là 1 "kết thúc". Kiểm thử đơn vị là 1 ví dụ cơ bản cho điều này.
+Điều này nghe có vè mâu thuẫn với điều trươc, nhưng cũng giống như nhiều thứ khác, chuẩn hóa cũng chỉ là 1 công cụ. Nó sẽ chẳng có 1 điểm kết cụ thể nào. Tôi nghĩa rằng nhiều nhà phát triển quên mất điều này và bắt đầu coi "công cụ" như là 1 "kết thúc". UnitTest là 1 ví dụ cơ bản cho điều này.
 
 Khi tôi làm việc trên 1 hệ thống có hệ thống phân cấp rõ ràng cho khách hàng tôi đã gặp 1 vài điều kiểu như thế này:
 
@@ -181,19 +181,18 @@ Từ [Hướng dẫn thực hành với thiết kế cơ sở dữ liệu quan h
 
 **12. Không phân tích hiệu suất trên các câu lệnh**
 
-Theo chủ nghĩa thực dụng tối cao, đặc biệt là trong cơ sở dữ liệu. Nếu bạn vẫn đang bám dính lấy nguyên tắc rằng chúng đã trở nên độc đoán thì bạn thực sự đang mắc sai lầm đấy. Lấy 1 ví dụ về các truy vấ gộpn bên trên. Phiên bản gộp có vẻ nhìn "ổn" nhưng hiệu suất của nó thì tệ. Việc so sanh về hiệu suất nên kết thúc cuộc tranh luận (nhưng nó không) nhưng thêm 1 điều rằng : việc bắn quá nhiều view thống báo xấu ngay trong vị trí đầu tiên là ngu dốt, thậm chí là nguy hiểm
+Theo chủ nghĩa thực dụng tối cao, đặc biệt là trong cơ sở dữ liệu. Nếu bạn vẫn đang bám dính lấy nguyên tắc rằng chúng đã trở nên độc đoán thì bạn thực sự đang mắc sai lầm đấy. Lấy 1 ví dụ về các truy vấ gộp bên trên. Phiên bản gộp có vẻ nhìn "ổn" nhưng hiệu suất của nó thì tệ. Việc so sanh về hiệu suất nên kết thúc cuộc tranh luận (nhưng nó không) nhưng thêm 1 điều rằng : việc bắn quá nhiều view thống báo xấu ngay trong vị trí đầu tiên là ngu dốt, thậm chí là nguy hiểm
 
 **13. Quán tin vào UNION ALL và đặc biệt là cấu trúc UNION**
 
 1 UNION trong điều kiện SQL chỉ đơn thuần là nối các tập dữ liệu phù hợp, nghĩa là có cùng loại và cùng số cột. Sự khác nhau giữa chúng là UNION ALL là phép nối đơn thuần và nên được ưu tiên khi có thể, khi mà UNION sẽ thực hiện ngầm DISCTINCT để loại các dòng trùng lặp.
-UNIONs, như DISTINCT, có vai trò của riêng chúng. Đều có các ứng dụng hợp lệ. Nhưng nếu bạn tự tìm hiểu chúng nhiều 1 chút, đặc biệt là trong các truy vấn con, thì chúng thực sự đang làm sai.  Đó có thể là  trường hợp của cấu trúc trúy vấn tệ hoặc là 1 mô hình dữ liệu thiết kế kém khiến bạn phải làm những điều này.
+UNIONs, như DISTINCT, có vai trò của riêng chúng. Đều có các ứng dụng hợp lệ. Nhưng nếu bạn tự tìm hiểu chúng nhiều 1 chút, đặc biệt là trong các truy vấn con, thì chúng thực sự đang làm sai.  Đó có thể là  trường hợp của cấu trúc truy vấn tệ hoặc là 1 mô hình dữ liệu thiết kế kém khiến bạn phải làm những điều này.
 
 UNIONs, đặc biệt là khi sử dụng trong phép nối hoặc các truy vấn con phụ thuộc, có thể làm hỏng cơ sở dữ liệu. Cố gắng tranh sử dụng chúng nếu có thể.
 
 **14. Sử dụng điều kiện OR trong các câu truy vấn**
 
-This might seem harmless. After all, ANDs are OK. OR should be OK too right? Wrong. Basically an AND condition **restricts** the data set whereas an OR condition **grows** it but not in a way that lends itself to optimisation. Particularly when the different OR conditions might intersect thus forcing the optimizer to effectively to a DISTINCT operation on the result.
-Điều này trông có vẻ như vô hại. Sau cùng, thì ANDs thì ốt. OR cũng nên tốt phải không? Không đúng. Thông thường 1 điều kiện AND **hạn chế** tập dữ liệu trong khi điều kiện OR **làm tăng* nó nhưng không phải theo cách  khiến chúng được tối ưu. Đặc biệt khi các điều kiện  OR khác nhau có thể giao nhau khiến chó việc tối ưu hóa hiệu quả với các phép DISTINCT trong kết quả
+Điều này trông có vẻ như vô hại. Sau cùng, thì ANDs có vẻ tốt. Vậy thì OR cũng tốt phải không? Không đúng. Thông thường 1 điều kiện AND **hạn chế** tập dữ liệu trong khi điều kiện OR **làm tăng* nó nhưng không phải theo cách  khiến chúng được tối ưu. Đặc biệt khi các điều kiện  OR khác nhau có thể giao nhau khiến chó việc tối ưu hóa hiệu quả với các phép DISTINCT trong kết quả
 Tệ:
 
 ... WHERE a = 2 OR a = 5 OR a = 11
@@ -204,16 +203,16 @@ Tốt:
 
 Bây giờ việc tối ưu SQL của bạn có thể hiệu quả từ câu trúy vấn đầu tiên  tới cái thứ 2. Nhưng có thể không. Đừng làm như thế.
 
-**15. Không thiết kế mô hình dữ liệu để có giải pháp hiệu suất cao**
+**15. Không thiết kế mô hình dữ liệu để tận dụng các giải pháp hiệu suất cao**
 
-Đây là điểm rất khó để định lượng. Nó thường được theo dõi hiệu quả của nó. Nếu bạn thấy mình đang biết các câu truy vấn cho các việc tương đối đơn giản hay các truy vấn để tìm các thông tin tương đối đơn giản nhưng không hiệu quả, thì bạn chắc chắn đang có mô hình dữ liệu tệ.
+Đây là điểm rất khó để định lượng. Nó thường được theo dõi thông qua hiệu quả của nó. Nếu bạn thấy mình đang viết các câu truy vấn cho các việc tương đối đơn giản hay các truy vấn để tìm các thông tin tương đối đơn giản nhưng không hiệu quả, thì bạn chắc chắn đang có mô hình dữ liệu tệ.
 
 Bằng 1 cách nào đó, điều này tổng kết tất cả các điều trước đó nhưng nó có thêm 1 cảnh bảo là những việc như tối ưu truy vấn thường xong đầu tiên trong khi điều này nên được hoàn thành thứ 2. Đầu tiên và cũng là quan trọng nhất là bạn nên chắc rằng bạn có 1 mô hình dữ liệu tốt trước khi cố gắng tối ưu hiệu suất. Và Knuth nói rằng:
 > Tối ưu sớm là gốc rễ của mọi điều xấu.
 
 **16. Sử dụng Database Transactions sai **
 
-Tất cả thay đổi dữ liệu cho 1 quá trình cụ thể nên atomic. Vị dụ. Nếu hoạt động thành công, nó sẽ thực hiện đầy đủ. Còn nếu nó thật bại, thì dữ liệu vấn không thay đổi. Không nên để xảy ra khả năng thay đổi "1 nửa"
+Tất cả thay đổi dữ liệu cho 1 quá trình cụ thể nên tuân theo mô hình nguyên tử. Ví dụ. Nếu hoạt động thành công, nó sẽ thực hiện đầy đủ. Còn nếu nó thật bại, thì dữ liệu sẽ không thay đổi. Không nên để xảy ra khả năng thay đổi "1 nửa"
 
 Lý tưởng thì cách tốt nhất để đạt được điều này là thiết kế toàn bộ hệ thống nên cố gắng hỗ trợ toàn bộ thay đổi dữ liệu qua từng câu lệnh INSERT/UPDATE/DELETE đơn. Trong trường hợp này, không có xử lý transaction đặc biệt nào cần thiết cả, vì engine cơ sở dữ liệu của bạn nên làm điều này tự động.
 
@@ -223,7 +222,7 @@ Tuy nhiên, nếu bất kỳ tiến trình nào yêu cầ nhiều câu lệnh đ
 - Commit Transaction sau câu lệnh cuối cùng.
 - Khi có bất kỳ lỗi nào, tiến hành Rollback Transaction. Và bất kỳ NB nào! Đừng quên bỏ qua/ dừng tất cả các câu lệnh sau các lỗi.
 
-Chủ ý để ý cẩn thận tới (Subtleties: bản gốc tiếng anh sai xừ rồi) sự khôn khéo trong việc cơ sở dữ liệu của bnaj kết nối các lớp, và engine cơ sở dữ liệu tương tác với vấn đề này.
+Chủ ý để ý cẩn thận tới (Subtleties: bản gốc tiếng anh sai xừ rồi) sự khôn khéo trong việc cơ sở dữ liệu của bạn kết nối các lớp, và engine cơ sở dữ liệu tương tác với vấn đề này.
 **17. Không hiểu mô hình 'set-based'**
 
 Ngôn ngữ SQL tuân theo mô hình cụ thể phù hợp với các loại vấn đề cụ thể. Mặc dù có nhiều phần mở rộng cung cấp cụ thể, cuộc đấu tranh ngôn ngữ đẻ giải quyết vấn đề này là không đáng kể trong ngôn ngữ như Java, C#, Delphi vân vân
